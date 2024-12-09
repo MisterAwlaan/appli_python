@@ -1,1 +1,8 @@
-ordinateur 
+ordinateur : 1500
+télephone : 200
+playstation : 500
+clavier : 100
+souris : 50
+tapis_de_souris : 5 
+bureau : 200
+casque = 80

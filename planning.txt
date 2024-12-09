@@ -1,0 +1,144 @@
+📆 Semaine 1 : Configuration & Développement de la première partie (Gestion de la liste de produits)
+Objectifs :
+Configurer l'environnement de travail.
+Développer l'application de base pour permettre la gestion de la liste de produits.
+
+Jour 1 : Configuration de l'environnement
+Installer Python et les bibliothèques nécessaires.
+Configurer le projet avec Git.
+Installer Docker pour la containerisation future.
+Tâches :
+
+Initialiser le projet avec git init.
+Configurer un environnement virtuel.
+Planifier la structure du projet avec des dossiers clairs.
+
+Jour 2 : Développer le module de gestion des produits
+Développer une fonctionnalité pour permettre à l'utilisateur de charger une liste de produits depuis un fichier texte.
+Tâches :
+
+Écrire un module pour la lecture et le traitement de fichiers texte.
+Implémenter la logique pour ajouter, rechercher et trier des produits.
+
+Jour 3 : Interface en ligne de commande (CLI) - partie 1
+Développer une interface simple pour que l'utilisateur interagisse avec la liste de produits.
+Tâches :
+
+Implémenter un menu avec des commandes simples.
+Ajouter un produit.
+Rechercher un produit.
+Trier la liste de produits.
+
+Jour 4 : Tests & Optimisations
+Écrire des tests simples pour valider les fonctionnalités de base.
+Optimiser le code et s'assurer qu'il est clair et modulaire.
+
+Jour 5 : Dockerisation de l'application
+Préparer l'environnement pour permettre la containerisation.
+Tâches :
+
+Écrire un Dockerfile.
+Construire et exécuter l'application avec Docker.
+Tester pour s'assurer que tout fonctionne correctement dans le conteneur.
+Objectifs fin de semaine 1 :
+Le module de gestion de produits doit être fonctionnel.
+L'interface en ligne de commande doit permettre les opérations basiques.
+Docker doit être configuré.
+
+
+
+📆 Semaine 2 : Intégration de la base de données & Développement de la sécurité
+Objectifs :
+Intégrer une base de données pour gérer plusieurs commerçants.
+Ajouter la sécurité avec un suivi des mots de passe compromis.
+Développer une logique pour la détection de failles de sécurité.
+
+
+Jour 1-2 : Configuration de la base de données
+Définir la structure de la base de données avec CSV.
+Permettre l'ajout et la récupération d'utilisateurs et leurs mots de passe.
+Tâches :
+
+Développer des fonctions pour interagir avec la base CSV.
+Implémenter la logique pour vérifier les mots de passe.
+
+
+
+Jour 3 : Sécurité & API pour la détection de mots de passe compromis
+Intégrer une API pour la détection de mots de passe compromis.
+Proposer des alertes pour les utilisateurs avec mots de passe faibles ou compromis.
+Tâches :
+
+Explorer une API existante pour la détection de failles de sécurité (par exemple, Have I Been Pwned).
+Intégrer l'API dans l'application.
+Jour 4 : Interface utilisateur avec Tkinter/PyQt
+Développer une interface simple avec Tkinter ou PyQt.
+Tâches :
+
+Développer les éléments de l'interface utilisateur.
+Fenêtre principale avec authentification.
+Vue pour la gestion de produits.
+
+
+Jour 5 : Tests de l'intégration & Sécurité
+Tester l'intégration des fonctionnalités de base avec la base de données.
+Simuler des scénarios avec mots de passe compromis pour valider l'API.
+Objectifs fin de semaine 2 :
+Base de données avec gestion multi-utilisateur.
+Sécurité avec détection de mots de passe compromis.
+Une première version de l'interface utilisateur avec un système d'authentification.
+
+
+📆 Semaine 3 : Statistiques, commandes & Interface graphique
+Objectifs :
+Permettre l'affichage des statistiques.
+Intégrer la possibilité de recevoir des commandes.
+Finaliser l'interface utilisateur.
+Finaliser la dockerisation.
+
+
+Jour 1-2 : Intégrer des statistiques avec Matplotlib/Seaborn
+Ajouter des statistiques des données (ex : nombre de produits, utilisateurs actifs, ventes).
+Tâches :
+
+Analyser les données avec Pandas.
+Générer des graphiques avec Matplotlib ou Seaborn.
+Jour 3 : Permettre à l'application de recevoir des commandes
+Développer la logique pour que l'API puisse permettre l'envoi/réception de commandes.
+Tâches :
+
+Étendre la base de données pour permettre l'enregistrement des commandes.
+Tester les commandes avec l'API.
+Jour 4 : Finaliser l'interface graphique
+Ajouter toutes les fonctionnalités nécessaires dans l'interface graphique.
+Tâches :
+
+Interface avec connexion utilisateur.
+Vue avec la liste des produits.
+Vue pour la gestion des commandes.
+Vue pour l'affichage des statistiques.
+Jour 5 : Tests finaux & Dockerisation
+Tester toutes les fonctionnalités de bout en bout.
+S'assurer que Docker fonctionne correctement avec toutes les nouvelles fonctionnalités.
+Objectifs fin de semaine 3 :
+L'application doit être entièrement fonctionnelle avec une base de données sécurisée.
+L'interface doit être ergonomique et simple d'utilisation.
+Les statistiques et commandes doivent être intégrées avec succès.
+Docker doit être configuré et prêt pour le déploiement.
+🚀 Livrables attendus :
+Application de gestion de produits avec gestion multi-utilisateur via base de données CSV.
+Interface utilisateur avec authentification.
+Système de détection de failles de sécurité avec API.
+Fonctionnalité d'affichage des statistiques avec Matplotlib/Seaborn.
+Gestion des commandes avec API.
+Dockerisation de l'application.
+Utilisation de Git pour la gestion des versions.
+📌 Outils utilisés :
+Langage : Python
+Base de données : Fichier CSV local
+Sécurité : API externe pour la détection de mots de passe compromis
+Graphiques : Matplotlib ou Seaborn
+Interface : Tkinter ou PyQt
+Containerisation : Docker
+Gestion de versions : Git
+Ce planning est une feuille de route pour rester organisé sur 3 semaines tout en s'assurant que chaque fonctionnalité est bien intégrée et testée à chaque étape. Si certaines tâches avancent plus vite ou nécessitent plus de temps, n'hésitez pas à ajuster le calendrier !
