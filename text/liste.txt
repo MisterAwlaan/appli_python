@@ -1,3 +1,8 @@
+Produit        Prix 
 
-moto
-caca
+Ordinateur     1500
+telephone      300
+souris         50
+casque         30
+bureau         300 
+test   test

@@ -4,7 +4,7 @@ def afficher_menu():
     print("2-Ajout d'un produit")
     print("3-suppression d'un produit")
     print("4-quitter")
-
+    
 def afficher_liste():
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
         contenu = liste.read()
@@ -24,6 +24,13 @@ def suppression_produit():
         liste.writelines(lignes_modifiees)  
     print("La ligne a été supprimée.")
 
+def tri_produit_prix_croissant():
+    
+    
+    pass
+
+def recherche_produit():
+    pass
     
 ####Script###
 
@@ -31,7 +38,7 @@ afficher_menu()
 choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
 
 if choix == 1 : 
-    afficher_liste()
+    print(afficher_liste())
     choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
 if choix == 2 :
     ajout_produit()
