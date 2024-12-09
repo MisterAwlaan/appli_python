@@ -10,7 +10,7 @@ def afficher_liste():
         return contenu
     
 def ajout_produit():
-    contenu = input("Nouveau produit : produit:prix   ")
+    contenu = input("\nNouveau produit : produit:prix   ")
     with open('./text/liste.txt','a') as liste :
         liste.write(contenu)
 
