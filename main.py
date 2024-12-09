@@ -10,13 +10,14 @@ def afficher_liste():
         return contenu
     
 def ajout_produit():
-    contenu = input("\nNouveau produit : produit:prix   ")
+    contenu = input("Nouveau produit : produit:prix   ")
     with open('./text/liste.txt','a') as liste :
-        liste.write(contenu)
+        liste.write(contenu + '\n')
 
 def suppression_produit():
     pass
     
     
-print(ajout_produit())
+
+ajout_produit()
 print(afficher_liste())
