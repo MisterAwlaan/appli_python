@@ -3,6 +3,7 @@ def afficher_menu():
     print("1-Afficher la liste")
     print("2-Ajout d'un produit")
     print("3-suppression d'un produit")
+    print("4-quitter")
 
 def afficher_liste():
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
@@ -16,20 +17,28 @@ def ajout_produit():
 
 def suppression_produit():
     ligne_a_supprimer = input("Entrez la ligne à supprimer (produit:prix) : ")
-    
     with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()  
-    
     lignes_modifiees = [ligne for ligne in lignes if ligne.strip() != ligne_a_supprimer.strip()]
     with open('./text/liste.txt', 'w') as liste:
         liste.writelines(lignes_modifiees)  
-
     print("La ligne a été supprimée.")
 
     
+####Script###
+
+afficher_menu()
+choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
+
+if choix == 1 : 
+    afficher_liste()
+    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+if choix == 2 :
+    ajout_produit()
+    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+if choix == 3: 
+    suppression_produit()
+    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+if choix == 4 : 
+    print("Aurevoir")
     
-    
-
-
-print(afficher_liste())
-
