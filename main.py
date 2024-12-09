@@ -15,9 +15,21 @@ def ajout_produit():
         liste.write(contenu + '\n')
 
 def suppression_produit():
-    pass
+    ligne_a_supprimer = input("Entrez la ligne à supprimer (produit:prix) : ")
+    
+    with open('./text/liste.txt', 'r') as liste:
+        lignes = liste.readlines()  
+    
+    lignes_modifiees = [ligne for ligne in lignes if ligne.strip() != ligne_a_supprimer.strip()]
+    with open('./text/liste.txt', 'w') as liste:
+        liste.writelines(lignes_modifiees)  
+
+    print("La ligne a été supprimée.")
+
+    
     
     
 
-ajout_produit()
+
 print(afficher_liste())
+
