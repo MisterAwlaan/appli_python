@@ -11,7 +11,7 @@ def afficher_liste():
         return contenu
     
 def ajout_produit():
-    contenu = input("Nouveau produit : produit:prix   ")
+    contenu = input("Nouveau produit : ")
     with open('./text/liste.txt','a') as liste :
         liste.write(contenu + '\n')
 
@@ -25,8 +25,6 @@ def suppression_produit():
     print("La ligne a été supprimée.")
 
 def tri_produit_prix_croissant():
-    
-    
     pass
 
 def recherche_produit():
@@ -37,15 +35,23 @@ def recherche_produit():
 afficher_menu()
 choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
 
-if choix == 1 : 
-    print(afficher_liste())
-    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-if choix == 2 :
-    ajout_produit()
-    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-if choix == 3: 
-    suppression_produit()
-    choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-if choix == 4 : 
-    print("Aurevoir")
+while choix != 4 : 
+    
+    if choix == 1 : 
+        print(afficher_liste())
+        print('')
+        afficher_menu()
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 2 :
+        ajout_produit()
+        print('')
+        afficher_menu()
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 3: 
+        suppression_produit()
+        print('')
+        afficher_menu()
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 4 : 
+        print("Aurevoir")
     
