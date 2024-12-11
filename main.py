@@ -90,7 +90,6 @@ def quicksort_prix(lignes):
     if len(lignes) <= 1:
         return lignes  
     pivot = float(lignes[-1].strip().split(';')[2])
-
     
     moins_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) <= pivot]
     plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
@@ -136,22 +135,25 @@ def recherche_produit():
 afficher_menu()
 choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
 
-while choix != 6 : 
+while choix != 8 : 
     
     if choix == 1 : 
+        afficher_menu()
+        print('')
         print(afficher_liste())
         print('')
-        afficher_menu()
         choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
     if choix == 2 :
+        afficher_menu()
+        print('')
         ajout_produit()
         print('')
-        afficher_menu()
         choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
     if choix == 3: 
+        afficher_menu()
+        print('')
         suppression_produit()
         print('')
-        afficher_menu()
         choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
     if choix == 4 : 
         recherche_produit()
