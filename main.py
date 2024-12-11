@@ -36,35 +36,78 @@ def suppression_produit():
     
 
 def tri_par_ordre_alphabetique():
-    with open('./text/liste.txt','r',encoding='utf-8') as liste :
-        lignes = liste.readlines()
-        tri = sorted([ligne.strip() for ligne in lignes ])
-    with open('./text/liste.txt','w') as fichier : 
-        for ligne in tri : 
+    with open('./text/liste.txt', 'r', encoding='utf-8') as liste:
+        lignes = [ligne.strip() for ligne in liste.readlines()]  
+
+    
+    for i in range(1, len(lignes)):
+        current_line = lignes[i]
+        j = i - 1
+       
+        while j >= 0 and lignes[j] > current_line:
+            lignes[j + 1] = lignes[j]  
+            j -= 1
+        lignes[j + 1] = current_line 
+
+    
+    with open('./text/liste.txt', 'w', encoding='utf-8') as fichier:
+        for ligne in lignes:
             fichier.write(ligne + '\n')
 
+    print("Le tri par ordre alphabétique a été effectué.")
+
+
 def tri_par_quantite():
-    with open('./text/liste.txt','r') as liste : 
+    
+    with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()
+    
+   
+    for i in range(1, len(lignes)):
+        
+        current_line = lignes[i]
+        current_quantity = float(current_line.strip().split(';')[1])
+        j = i - 1
+        
+        
+        while j >= 0 and float(lignes[j].strip().split(';')[1]) > current_quantity:
+            lignes[j + 1] = lignes[j]
+            j -= 1
+        
+        
+        lignes[j + 1] = current_line
 
-    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip().split(';')[1]))
-
-    with open('./text/liste.txt','w') as liste :
-        for ligne in lignes_triees:
+    
+    with open('./text/liste.txt', 'w') as liste:
+        for ligne in lignes:
             liste.write(ligne.strip() + '\n')
-    print("le tri par quantité a été effectué")
+    
+    print("Le tri par quantité a été effectué.")
+
 
 
 def tri_par_prix():
-    with open('./text/liste.txt','r') as liste : 
+    with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()
-    
-    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip().split(';')[2]))
+    for i in range(1, len(lignes)):
+       
+        current_line = lignes[i]
+        current_price = float(current_line.strip().split(';')[2])
+        j = i - 1
+        
+        
+        while j >= 0 and float(lignes[j].strip().split(';')[2]) > current_price:
+            lignes[j + 1] = lignes[j] 
+            j -= 1
+        lignes[j + 1] = current_line
 
-    with open('./text/liste.txt','w') as liste : 
-        for ligne in lignes_triees : 
-            liste.write(ligne.strip()+ '\n')
-    print("le tri par prix a été effectué.")
+    
+    with open('./text/liste.txt', 'w') as liste:
+        for ligne in lignes:
+            liste.write(ligne.strip() + '\n')
+    
+    print("Le tri par prix  a été effectué.")
+
     
     
     
@@ -83,7 +126,7 @@ def recherche_produit():
     
     
     
-    pass
+    
     
 ####Script###
 
