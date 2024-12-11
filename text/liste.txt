@@ -1,3 +1,2 @@
-ordinateur
-telephone
-souris
+arbre;89;0.1
+bureau;3;200
