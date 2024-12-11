@@ -5,8 +5,9 @@ def afficher_menu():
     print("3-suppression d'un produit")
     print("4-rechercher un produit")
     print("5-Trié le produit par ordre alphabétique")    
-    print("6-Quitter")
-
+    print("6-Trié par la quantité")
+    print("7-Trié par le prix ")
+    print("8-Quitter")
 
 def afficher_liste():
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
@@ -32,7 +33,7 @@ def suppression_produit():
     print(f"Produit'{produit_a_supprimer}'supprimé avec succès") 
 
     
-    pass
+    
 
 def tri_par_ordre_alphabetique():
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
@@ -41,8 +42,32 @@ def tri_par_ordre_alphabetique():
     with open('./text/liste.txt','w') as fichier : 
         for ligne in tri : 
             fichier.write(ligne + '\n')
-    
 
+def tri_par_quantite():
+    with open('./text/liste.txt','r') as liste : 
+        lignes = liste.readlines()
+
+    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip().split(';')[1]))
+
+    with open('./text/liste.txt','w') as liste :
+        for ligne in lignes_triees:
+            liste.write(ligne.strip() + '\n')
+    print("le tri par quantité a été effectué")
+
+
+def tri_par_prix():
+    with open('./text/liste.txt','w') as liste : 
+        lignes = liste.readlines()
+    
+    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip.split(';')[2]))
+
+    with open('./text/liste.txt','w') as liste : 
+        for ligne in lignes_triees : 
+            liste.write(ligne.strip()+ '\n')
+    print("le tri par prix a été effectué.")
+    
+    
+    
 def recherche_produit():
     nom_recherche = input("Entrer le nom du produit : ")
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
@@ -91,5 +116,12 @@ while choix != 6 :
         print("")
         choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
     if choix == 6 : 
-        print("Aurevoir")
-    
+        tri_par_quantite()
+        print("")
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 7 : 
+        tri_par_prix()
+        print("")
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 8 :
+        print("aurevoir")
