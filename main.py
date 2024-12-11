@@ -4,7 +4,7 @@ def afficher_menu():
     print("2-Ajout d'un produit")
     print("3-suppression d'un produit")
     print("4-rechercher un produit")
-    print("5-Trié le produit")    
+    print("5-Trié le produit par ordre alphabétique")    
     print("6-Quitter")
 
 
