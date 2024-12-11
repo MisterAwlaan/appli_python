@@ -17,7 +17,7 @@ def afficher_liste():
 def ajout_produit():
     nom = input("entrer le nom du produit : ")
     quantite = input("entrer la quantité du produit : ")
-    prix = input("entrer le nom du produi : ")
+    prix = input("entrer le prix du produit : ")
     with open('./text/liste.txt','a',encoding='utf-8') as liste :
         liste.write(f"{nom};{quantite};{prix}\n")
     print(f"Produit'{nom}'ajouté avec succès.")
@@ -56,10 +56,10 @@ def tri_par_quantite():
 
 
 def tri_par_prix():
-    with open('./text/liste.txt','w') as liste : 
+    with open('./text/liste.txt','r') as liste : 
         lignes = liste.readlines()
     
-    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip.split(';')[2]))
+    lignes_triees = sorted(lignes,key=lambda ligne: float(ligne.strip().split(';')[2]))
 
     with open('./text/liste.txt','w') as liste : 
         for ligne in lignes_triees : 

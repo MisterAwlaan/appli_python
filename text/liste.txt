@@ -1,0 +1,2 @@
+souris;8;15
+ordinateur;5;100
