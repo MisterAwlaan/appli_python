@@ -86,27 +86,30 @@ def tri_par_quantite():
 
 
 
+def quicksort_prix(lignes):
+    if len(lignes) <= 1:
+        return lignes  
+    pivot = float(lignes[-1].strip().split(';')[2])
+
+    
+    moins_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) <= pivot]
+    plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
+
+    return quicksort_prix(moins_que_pivot) + [lignes[-1]] + quicksort_prix(plus_que_pivot)
+
+
 def tri_par_prix():
     with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()
-    for i in range(1, len(lignes)):
-       
-        current_line = lignes[i]
-        current_price = float(current_line.strip().split(';')[2])
-        j = i - 1
-        
-        
-        while j >= 0 and float(lignes[j].strip().split(';')[2]) > current_price:
-            lignes[j + 1] = lignes[j] 
-            j -= 1
-        lignes[j + 1] = current_line
 
     
-    with open('./text/liste.txt', 'w') as liste:
-        for ligne in lignes:
-            liste.write(ligne.strip() + '\n')
+    lignes_triees = quicksort_prix(lignes)
+    with open('./text/liste.txt', 'w') as fichier:
+        for ligne in lignes_triees:
+            fichier.write(ligne.strip() + '\n')
     
-    print("Le tri par prix  a été effectué.")
+    print("Le tri par prix avec QuickSort a été effectué.")
+
 
     
     
