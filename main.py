@@ -110,7 +110,31 @@ def tri_par_prix():
     print("Le tri par prix avec QuickSort a été effectué.")
 
 
+def recherche_dichotomie_par_nom(fichier, nom_cherche):
+    with open(fichier, 'r') as f:
+        valeurs = []
+        for ligne in f.readlines():
+            try:
+                nom_produit = ligne.strip().split(';')[0]  
+                valeurs.append(nom_produit)
+            except IndexError:
+                
+                continue
+    valeurs_triees = sorted(valeurs)
+    gauche, droite = 0, len(valeurs_triees) - 1
+    while gauche <= droite:
+        milieu = (gauche + droite) // 2
+        if valeurs_triees[milieu] == nom_cherche:
+            print(f"Produit trouvé : {valeurs_triees[milieu]}")
+            return valeurs_triees[milieu]
+        elif valeurs_triees[milieu] < nom_cherche:
+            gauche = milieu + 1
+        else:
+            droite = milieu - 1
+
     
+    print("Produit non trouvé.")
+    return None
     
     
 def recherche_produit():
