@@ -110,8 +110,8 @@ def tri_par_prix():
     print("Le tri par prix avec QuickSort a été effectué.")
 
 
-def recherche_dichotomie_par_nom(fichier, nom_cherche):
-    with open(fichier, 'r') as f:
+def recherche_dichotomie_par_nom(nom_cherche):
+    with open('./text/liste.txt', 'r') as f:
         valeurs = []
         for ligne in f.readlines():
             try:
@@ -195,5 +195,9 @@ while choix != 8 :
         tri_par_prix()
         print("")
         choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+    if choix == 8 : 
+        nom_cherche = input("entrer le produit à chercher : ")
+        recherche_dichotomie_par_nom(nom_cherche)
+    
     if choix == 8 :
         print("aurevoir")
