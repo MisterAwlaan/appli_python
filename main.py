@@ -7,7 +7,8 @@ def afficher_menu():
     print("5-Trié le produit par ordre alphabétique")    
     print("6-Trié par la quantité")
     print("7-Trié par le prix ")
-    print("8-Quitter")
+    print("8-Recherche par dicho")
+    print("9-Quitter")
 
 def afficher_liste():
     with open('./text/liste.txt','r',encoding='utf-8') as liste :
@@ -159,7 +160,7 @@ def recherche_produit():
 afficher_menu()
 choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
 
-while choix != 8 : 
+while choix != 9 : 
     
     if choix == 1 : 
         afficher_menu()
@@ -198,6 +199,8 @@ while choix != 8 :
     if choix == 8 : 
         nom_cherche = input("entrer le produit à chercher : ")
         recherche_dichotomie_par_nom(nom_cherche)
-    
-    if choix == 8 :
+        print("")
+        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
+        
+    if choix == 9 :
         print("aurevoir")
