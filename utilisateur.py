@@ -7,11 +7,7 @@ def mots_de_passe_hash(password):
     hashed = hashlib.pbkdf2_hmac('sha256', password.encode(), sel, 100000)
     return sel + hashed
 
-def veri_mots_de_passe(mots_de_passe_stocke, provided_password):
-    sel = mots_de_passe_stocke[:16]  # Extrait le sel des 16 premiers bytes
-    hash_stocke = mots_de_passe_stocke[16:]  # Le reste est le hachage
-    provided_hash = hashlib.pbkdf2_hmac('sha256', provided_password.encode(), sel, 100000)
-    return hash_stocke == provided_hash
+
 
 def ajouter_utilisateur(username, email, password):
     mots_de_passe_hashe = mots_de_passe_hash(password)
@@ -20,21 +16,41 @@ def ajouter_utilisateur(username, email, password):
         writer = csv.writer(file)
         writer.writerow([username, email, mots_de_passe_hashe.hex()])
 
+def verifier_mot_de_passe(password, stored_password):
+    stored_password_bytes = bytes.fromhex(stored_password)
+    sel = stored_password_bytes[:16]
+    hashed = stored_password_bytes[16:]
+    hashed_to_check = hashlib.pbkdf2_hmac('sha256', password.encode(), sel, 100000)
+    return hashed == hashed_to_check
+
 def connexion(username, password):
-    with open('./text/utilisateur.csv', 'r', newline='') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if row[0] == username:
-                mots_de_passe_stocke = bytes.fromhex(row[2])
-                if veri_mots_de_passe(mots_de_passe_stocke, password):
-                    return True
-    return False
+    try:
+        with open('./text/utilisateur.csv', mode='r', newline='') as file:
+            reader = csv.reader(file)
+            for row in reader:
+               
+                if len(row) < 3:
+                    continue
+                
+                if row[0] == username:
+                    
+                    if verifier_mot_de_passe(password, row[2]):
+                        return True
+                    else:
+                        return False
+        return False  
+    except FileNotFoundError:
+        print("Le fichier utilisateur n'existe pas.")
+        return False
 
-# Exemple d'utilisation
-username = 'test'
-password = 'test'
 
-if connexion(username, password):
+
+username_input = input("Nom d'utilisateur : ")
+password_input = input("Mot de passe : ")
+
+if connexion(username_input, password_input):
     print("Connexion réussie !")
 else:
-    print("Nom d'utilisateur ou mot de passe incorrect.")
+    print("Échec de la connexion.")
+
+
