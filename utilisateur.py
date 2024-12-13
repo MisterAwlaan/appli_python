@@ -7,7 +7,29 @@ def mots_de_passe_hash(password):
     hashed = hashlib.pbkdf2_hmac('sha256', password.encode(), sel, 100000)
     return sel + hashed
 
+def menu_connexion():
+    
+    while True:
+        print("\nMenu de connexion :")
+        print("1. Se connecter")
+        print("2. Quitter")
+        choix = input("Choisissez une option : ")
 
+        if choix == "1":
+            username = input("Nom d'utilisateur : ")
+            password = input("Mot de passe : ")
+            utilisateur_connecte = connexion(username, password)
+
+            if utilisateur_connecte:
+                print(f"Connexion réussie. Bienvenue, {utilisateur_connecte}!")
+                menu_utilisateur(utilisateur_connecte)
+            else:
+                print("Échec de la connexion. Veuillez vérifier vos identifiants.")
+        elif choix == "2":
+            print("Au revoir !")
+            break
+        else:
+            print("Option invalide, veuillez réessayer.")
 
 def ajouter_utilisateur(username, email, password):
     mots_de_passe_hashe = mots_de_passe_hash(password)
@@ -43,14 +65,35 @@ def connexion(username, password):
         print("Le fichier utilisateur n'existe pas.")
         return False
 
+def menu_utilisateur(username):
+    """
+    Affiche un menu pour permettre à l'utilisateur connecté d'ajouter des produits ou de se déconnecter.
+    :param username: Nom de l'utilisateur connecté
+    """
+    while True:
+        print("\nMenu :")
+        print("1. Ajouter un produit")
+        print("2. Se déconnecter")
+        choix = input("Choisissez une option : ")
+
+        if choix == "1":
+            produit = input("Entrez le nom du produit à ajouter : ")
+            ajouter_produit(username, produit)
+            print(f"Produit '{produit}' ajouté avec succès à la liste.")
+        elif choix == "2":
+            print("Déconnexion réussie.")
+            break
+        else:
+            print("Option invalide, veuillez réessayer.")
 
 
-username_input = input("Nom d'utilisateur : ")
-password_input = input("Mot de passe : ")
-
-if connexion(username_input, password_input):
-    print("Connexion réussie !")
-else:
-    print("Échec de la connexion.")
+def ajouter_produit(username, produit):
+    """
+    Ajoute un produit avec le nom d'utilisateur dans le fichier texte.
+    :param username: Nom d'utilisateur
+    :param produit: Nom du produit à ajouter
+    """
+    with open('./text/produits.txt', mode='a') as file:
+        file.write(f"{username}, {produit}\n")
 
 
