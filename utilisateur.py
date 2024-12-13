@@ -8,11 +8,11 @@ def mots_de_passe_hash(password):
     return sel + hashed
 
 def menu_connexion():
-    
     while True:
         print("\nMenu de connexion :")
         print("1. Se connecter")
-        print("2. Quitter")
+        print("2. Créer un compte")
+        print("3. Quitter")
         choix = input("Choisissez une option : ")
 
         if choix == "1":
@@ -26,10 +26,14 @@ def menu_connexion():
             else:
                 print("Échec de la connexion. Veuillez vérifier vos identifiants.")
         elif choix == "2":
-            print("Au revoir !")
-            break
+            username = input("Nom d'utilisateur : ")
+            email = input("adresse mail : ")
+            password = input("Mot de passe : ")
+            ajouter_utilisateur(username,email,password)
+            
         else:
             print("Option invalide, veuillez réessayer.")
+
 
 def ajouter_utilisateur(username, email, password):
     mots_de_passe_hashe = mots_de_passe_hash(password)
@@ -66,10 +70,6 @@ def connexion(username, password):
         return False
 
 def menu_utilisateur(username):
-    """
-    Affiche un menu pour permettre à l'utilisateur connecté d'ajouter des produits ou de se déconnecter.
-    :param username: Nom de l'utilisateur connecté
-    """
     while True:
         print("\nMenu :")
         print("1. Ajouter un produit")
@@ -78,7 +78,9 @@ def menu_utilisateur(username):
 
         if choix == "1":
             produit = input("Entrez le nom du produit à ajouter : ")
-            ajouter_produit(username, produit)
+            quantite = input("entrer la quantité : ")
+            prix = input("entrer le prix à l'unité du produit : ")
+            ajouter_produit(username, produit , quantite , prix)
             print(f"Produit '{produit}' ajouté avec succès à la liste.")
         elif choix == "2":
             print("Déconnexion réussie.")
@@ -86,14 +88,12 @@ def menu_utilisateur(username):
         else:
             print("Option invalide, veuillez réessayer.")
 
-
-def ajouter_produit(username, produit):
-    """
-    Ajoute un produit avec le nom d'utilisateur dans le fichier texte.
-    :param username: Nom d'utilisateur
-    :param produit: Nom du produit à ajouter
-    """
+def ajouter_produit(username, produit , quantite , prix):
     with open('./text/produits.txt', mode='a') as file:
-        file.write(f"{username}, {produit}\n")
+        file.write(f"{username}, {produit},{quantite},{prix}\n")
 
 
+### script ###
+
+
+menu_connexion()
