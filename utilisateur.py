@@ -8,7 +8,8 @@ def mots_de_passe_hash(password):
     return sel + hashed
 
 def menu_connexion():
-    while True:
+    
+    while True :
         print("\nMenu de connexion :")
         print("1. Se connecter")
         print("2. Créer un compte")
@@ -31,6 +32,10 @@ def menu_connexion():
             password = input("Mot de passe : ")
             ajouter_utilisateur(username,email,password)
             
+        elif choix == "3":
+            print("aurevoir")
+            break
+        
         else:
             print("Option invalide, veuillez réessayer.")
 
@@ -84,7 +89,7 @@ def menu_utilisateur(username):
             ajouter_produit(username, produit , quantite , prix)
             print(f"Produit '{produit}' ajouté avec succès à la liste.")
         elif choix == "2":
-            afficher_liste()
+            afficher_liste(username)
             break
         else:
             print("Option invalide, veuillez réessayer.")
