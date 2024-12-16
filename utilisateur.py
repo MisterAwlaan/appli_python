@@ -42,7 +42,6 @@ def menu_connexion():
 
 def ajouter_utilisateur(username, email, password):
     mots_de_passe_hashe = mots_de_passe_hash(password)
-
     with open('./text/utilisateur.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([username, email, mots_de_passe_hashe.hex()])
