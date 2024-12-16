@@ -61,7 +61,7 @@ def connexion(username, password):
                 if row[0] == username:
                     
                     if verifier_mot_de_passe(password, row[2]):
-                        return True
+                        return username
                     else:
                         return False
         return False  
@@ -88,7 +88,7 @@ def menu_utilisateur(username):
         else:
             print("Option invalide, veuillez réessayer.")
 
-def ajouter_produit(username, produit , quantite , prix):
+def ajouter_produit(username,produit,quantite , prix):
     with open('./text/produits.txt', mode='a') as file:
         file.write(f"{username}, {produit},{quantite},{prix}\n")
 

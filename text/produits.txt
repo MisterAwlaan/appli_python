@@ -1,2 +1,4 @@
 
-True, carotte,4,1
+test, Dimos,45,1
+test, chaise,45,0.2
+test, ps5,54,500
