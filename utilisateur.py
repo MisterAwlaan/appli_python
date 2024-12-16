@@ -73,7 +73,8 @@ def menu_utilisateur(username):
     while True:
         print("\nMenu :")
         print("1. Ajouter un produit")
-        print("2. Se déconnecter")
+        print("2. Afficher votre liste")
+        print("3. Se déconnecter")
         choix = input("Choisissez une option : ")
 
         if choix == "1":
@@ -83,7 +84,7 @@ def menu_utilisateur(username):
             ajouter_produit(username, produit , quantite , prix)
             print(f"Produit '{produit}' ajouté avec succès à la liste.")
         elif choix == "2":
-            print("Déconnexion réussie.")
+            afficher_liste()
             break
         else:
             print("Option invalide, veuillez réessayer.")
@@ -91,6 +92,72 @@ def menu_utilisateur(username):
 def ajouter_produit(username,produit,quantite , prix):
     with open('./text/produits.txt', mode='a') as file:
         file.write(f"{username}, {produit},{quantite},{prix}\n")
+
+def afficher_liste(username):
+    try:
+        with open('./text/produits.txt', 'r') as file:
+            produits = [line.strip().split(',') for line in file if line.startswith(username + ",")]
+
+        if produits:
+            print("\nVotre liste de produits :")
+            print(f"{'Produit':<20} {'Quantité':<10} {'Prix unitaire':<15}")
+            for produit in produits:
+                print(f"{produit[1]:<20} {produit[2]:<10} {produit[3]:<15}")
+        else:
+            print("Aucun produit trouvé dans votre liste.")
+    except FileNotFoundError:
+        print("Le fichier de produits est introuvable.")
+
+
+
+
+def tri_par_quantite():
+    with open('./text/liste.txt', 'r') as liste:
+        lignes = liste.readlines()
+    for i in range(1, len(lignes)):
+        
+        current_line = lignes[i]
+        current_quantity = float(current_line.strip().split(';')[1])
+        j = i - 1
+        
+        
+        while j >= 0 and float(lignes[j].strip().split(';')[1]) > current_quantity:
+            lignes[j + 1] = lignes[j]
+            j -= 1
+        
+        
+        lignes[j + 1] = current_line
+
+    
+    with open('./text/liste.txt', 'w') as liste:
+        for ligne in lignes:
+            liste.write(ligne.strip() + '\n')
+    
+    print("Le tri par quantité a été effectué.")
+
+
+def quicksort_prix(lignes):
+    if len(lignes) <= 1:
+        return lignes  
+    pivot = float(lignes[-1].strip().split(';')[2])
+    
+    moins_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) <= pivot]
+    plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
+
+    return quicksort_prix(moins_que_pivot) + [lignes[-1]] + quicksort_prix(plus_que_pivot)
+
+
+def tri_par_prix():
+    with open('./text/liste.txt', 'r') as liste:
+        lignes = liste.readlines()
+
+    
+    lignes_triees = quicksort_prix(lignes)
+    with open('./text/liste.txt', 'w') as fichier:
+        for ligne in lignes_triees:
+            fichier.write(ligne.strip() + '\n')
+    
+    print("Le tri par prix avec QuickSort a été effectué.")
 
 
 ### script ###
