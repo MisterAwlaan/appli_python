@@ -9,7 +9,7 @@ def mots_de_passe_hash(password):
 
 def menu_connexion():
     
-    while True :
+    while statu == True :
         print("\nMenu de connexion :")
         print("1. Se connecter")
         print("2. Créer un compte")
@@ -34,11 +34,11 @@ def menu_connexion():
             
         elif choix == "3":
             print("aurevoir")
-            break
+            statu = False
+           
         
         else:
             print("Option invalide, veuillez réessayer.")
-
 
 def ajouter_utilisateur(username, email, password):
     mots_de_passe_hashe = mots_de_passe_hash(password)
@@ -89,7 +89,9 @@ def menu_utilisateur(username):
             print(f"Produit '{produit}' ajouté avec succès à la liste.")
         elif choix == "2":
             afficher_liste(username)
-            break
+            
+        elif choix == "3":
+            menu_connexion()
         else:
             print("Option invalide, veuillez réessayer.")
 
@@ -111,9 +113,6 @@ def afficher_liste(username):
             print("Aucun produit trouvé dans votre liste.")
     except FileNotFoundError:
         print("Le fichier de produits est introuvable.")
-
-
-
 
 def tri_par_quantite():
     with open('./text/liste.txt', 'r') as liste:
@@ -139,7 +138,6 @@ def tri_par_quantite():
     
     print("Le tri par quantité a été effectué.")
 
-
 def quicksort_prix(lignes):
     if len(lignes) <= 1:
         return lignes  
@@ -149,7 +147,6 @@ def quicksort_prix(lignes):
     plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
 
     return quicksort_prix(moins_que_pivot) + [lignes[-1]] + quicksort_prix(plus_que_pivot)
-
 
 def tri_par_prix():
     with open('./text/liste.txt', 'r') as liste:
@@ -163,8 +160,6 @@ def tri_par_prix():
     
     print("Le tri par prix avec QuickSort a été effectué.")
 
-
 ### script ###
-
 
 menu_connexion()
