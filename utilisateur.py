@@ -1,4 +1,9 @@
+import smtplib
+from email.mime.text import MiMEText
+from email.mime.multipart import MiMEMultipart 
+import re 
 import csv
+import requests
 import hashlib
 import os
 
@@ -6,6 +11,66 @@ def mots_de_passe_hash(password):
     sel = os.urandom(16)
     hashed = hashlib.pbkdf2_hmac('sha256', password.encode(), sel, 100000)
     return sel + hashed
+
+def mots_de_passe_fort(password):
+    suggestions = []
+    if len(password) < 12:
+        suggestions.append("Le mot de passe doit contenir au moins 12 caractères.")
+    if not re.search(r'[A-Z]', password):
+        suggestions.append("Le mot de passe doit contenir au moins une lettre majuscule.")
+    if not re.search(r'[a-z]', password):
+        suggestions.append("Le mot de passe doit contenir au moins une lettre minuscule.")
+    if not re.search(r'[0-9]', password):
+        suggestions.append("Le mot de passe doit contenir au moins un chiffre.")
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        suggestions.append("Le mot de passe doit contenir au moins un caractère spécial.")
+    return suggestions
+
+def envoi_mail(email_client,objet,contenue):
+    from_email = "aminahajouah@gmail.com"
+    from_password = "password"    
+    
+    msg = MiMEMultipart()
+    msg['FROM'] = from_email
+    msg['TO'] = email_client
+    msg['Sujet'] = objet 
+
+    msg.attach(MiMEText(contenue, 'plain'))
+
+    serveur = smtplib.SMTP('')
+    serveur.starttls()
+    serveur.login(from_email,from_password)
+    text = msg.as_string()
+    serveur.sendmail(from_email,email_client,text)
+    serveur.quit()
+    
+def est_compromis(password):
+    sha1_mots_de_passe = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+    first5_char , tail = sha1_mots_de_passe[:5], sha1_mots_de_passe[5:]
+    reponse = requests.get(f'https://api.pwnedpasswords.com/range/{first5_char}')
+    hashes = (line.split(':') for line in reponse.text.splitlines())
+    for h,count in hashes : 
+        if h == tail : 
+            return int(count)
+    return 0
+    
+
+def  verif_et_alert_user():
+    with open('./text/utilisateur.csv',mode='r',newline='') as fichier:
+        reader = csv.reader(fichier)
+        for row in reader:
+            if len(row) < 3:
+                continue
+            username , email , password = row
+            mots_de_passe_compromis = est_compromis(mots_de_passe_hash)
+            if mots_de_passe_compromis > 0 : 
+                suggestion = mots_de_passe_fort(password)
+                alert_message = f"Votre mot de passe a été compromis. Voici quelques suggestions pour le renforcer :\n{', '.join(suggestion)}"
+                envoi_mail(email,"alerte de sécurité",alert_message)
+
+
+
+
 
 def menu_connexion():
     
