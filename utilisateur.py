@@ -96,7 +96,8 @@ def menu_connexion():
             email = input("adresse mail : ")
             password = input("Mot de passe : ")
             ajouter_utilisateur(username,email,password)
-            
+            verif_et_alert_user()
+        
         elif choix == "3":
             print("aurevoir")
             statu = False
