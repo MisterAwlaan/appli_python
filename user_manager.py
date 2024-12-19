@@ -10,11 +10,34 @@ class UserManager:
         self.user_file = user_file
 
     def add_user(self, username, email, password):
+        # Vérification de la force du mot de passe
+        suggestions = check_password_strength(password)
+        if suggestions:
+            print("Le mot de passe ne respecte pas les critères de sécurité :")
+            for suggestion in suggestions:
+                print(suggestion)
+            return
+
+        # Vérification si le mot de passe est compromis
+        compromised_count = is_password_compromised(password)
+        if compromised_count > 0:
+            print(f"Le mot de passe a été compromis {compromised_count} fois. Veuillez choisir un autre mot de passe.")
+            return
+
+        # Hachage du mot de passe
         hashed_password = hash_password(password)
+
+        # Ajout de l'utilisateur au fichier CSV
         try:
             with open(self.user_file, mode='a', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow([username, email, hashed_password])
+            print(f"Utilisateur {username} ajouté avec succès.")
+
+            # Envoi d'un e-mail de confirmation
+            confirmation_message = f"Bienvenue {username}! Votre compte a été créé avec succès."
+            send_email(email, "Confirmation d'inscription", confirmation_message)
+
         except Exception as e:
             print(f"Erreur lors de l'ajout de l'utilisateur : {e}")
 
