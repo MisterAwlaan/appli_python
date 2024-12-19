@@ -1,7 +1,7 @@
 import smtplib
-from email.mime.text import MiMEText
-from email.mime.multipart import MiMEMultipart 
-import re 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import re
 import csv
 import requests
 import hashlib
@@ -26,55 +26,50 @@ def mots_de_passe_fort(password):
         suggestions.append("Le mot de passe doit contenir au moins un caractère spécial.")
     return suggestions
 
-def envoi_mail(email_client,objet,contenue):
+def envoi_mail(email_client, objet, contenue):
     from_email = "aminahajouah@gmail.com"
-    from_password = "password"    
-    
-    msg = MiMEMultipart()
+    from_password = "password"
+
+    msg = MIMEMultipart()
     msg['FROM'] = from_email
     msg['TO'] = email_client
-    msg['Sujet'] = objet 
+    msg['Sujet'] = objet
 
-    msg.attach(MiMEText(contenue, 'plain'))
+    msg.attach(MIMEText(contenue, 'plain'))
 
-    serveur = smtplib.SMTP('')
+    serveur = smtplib.SMTP('smtp.gmail.com', 587)
     serveur.starttls()
-    serveur.login(from_email,from_password)
+    serveur.login(from_email, from_password)
     text = msg.as_string()
-    serveur.sendmail(from_email,email_client,text)
+    serveur.sendmail(from_email, email_client, text)
     serveur.quit()
-    
+
 def est_compromis(password):
     sha1_mots_de_passe = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
-    first5_char , tail = sha1_mots_de_passe[:5], sha1_mots_de_passe[5:]
+    first5_char, tail = sha1_mots_de_passe[:5], sha1_mots_de_passe[5:]
     reponse = requests.get(f'https://api.pwnedpasswords.com/range/{first5_char}')
     hashes = (line.split(':') for line in reponse.text.splitlines())
-    for h,count in hashes : 
-        if h == tail : 
+    for h, count in hashes:
+        if h == tail:
             return int(count)
     return 0
-    
 
-def  verif_et_alert_user():
-    with open('./text/utilisateur.csv',mode='r',newline='') as fichier:
+def verif_et_alert_user():
+    with open('./text/utilisateur.csv', mode='r', newline='') as fichier:
         reader = csv.reader(fichier)
         for row in reader:
             if len(row) < 3:
                 continue
-            username , email , password = row
-            mots_de_passe_compromis = est_compromis(mots_de_passe_hash)
-            if mots_de_passe_compromis > 0 : 
+            username, email, hashed_password = row
+            password = input(f"Entrez le mot de passe pour {username}: ")
+            mots_de_passe_compromis = est_compromis(password)
+            if mots_de_passe_compromis > 0:
                 suggestion = mots_de_passe_fort(password)
                 alert_message = f"Votre mot de passe a été compromis. Voici quelques suggestions pour le renforcer :\n{', '.join(suggestion)}"
-                envoi_mail(email,"alerte de sécurité",alert_message)
-
-
-
-
+                envoi_mail(email, "alerte de sécurité", alert_message)
 
 def menu_connexion():
-    
-    while statu == True :
+    while True:
         print("\nMenu de connexion :")
         print("1. Se connecter")
         print("2. Créer un compte")
@@ -95,22 +90,21 @@ def menu_connexion():
             username = input("Nom d'utilisateur : ")
             email = input("adresse mail : ")
             password = input("Mot de passe : ")
-            ajouter_utilisateur(username,email,password)
+            ajouter_utilisateur(username, email, password)
             verif_et_alert_user()
-        
+
         elif choix == "3":
             print("aurevoir")
-            statu = False
-           
-        
+            break
+
         else:
             print("Option invalide, veuillez réessayer.")
 
 def ajouter_utilisateur(username, email, password):
-    mots_de_passe_hashe = mots_de_passe_hash(password)
+    hashed_password = mots_de_passe_hash(password).hex()
     with open('./text/utilisateur.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([username, email, mots_de_passe_hashe.hex()])
+        writer.writerow([username, email, hashed_password])
 
 def verifier_mot_de_passe(password, stored_password):
     stored_password_bytes = bytes.fromhex(stored_password)
@@ -124,17 +118,15 @@ def connexion(username, password):
         with open('./text/utilisateur.csv', mode='r', newline='') as file:
             reader = csv.reader(file)
             for row in reader:
-               
                 if len(row) < 3:
                     continue
-                
+
                 if row[0] == username:
-                    
                     if verifier_mot_de_passe(password, row[2]):
                         return username
                     else:
                         return False
-        return False  
+        return False
     except FileNotFoundError:
         print("Le fichier utilisateur n'existe pas.")
         return False
@@ -151,17 +143,17 @@ def menu_utilisateur(username):
             produit = input("Entrez le nom du produit à ajouter : ")
             quantite = input("entrer la quantité : ")
             prix = input("entrer le prix à l'unité du produit : ")
-            ajouter_produit(username, produit , quantite , prix)
+            ajouter_produit(username, produit, quantite, prix)
             print(f"Produit '{produit}' ajouté avec succès à la liste.")
         elif choix == "2":
             afficher_liste(username)
-            
+
         elif choix == "3":
             menu_connexion()
         else:
             print("Option invalide, veuillez réessayer.")
 
-def ajouter_produit(username,produit,quantite , prix):
+def ajouter_produit(username, produit, quantite, prix):
     with open('./text/produits.txt', mode='a') as file:
         file.write(f"{username}, {produit},{quantite},{prix}\n")
 
@@ -184,31 +176,27 @@ def tri_par_quantite():
     with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()
     for i in range(1, len(lignes)):
-        
         current_line = lignes[i]
         current_quantity = float(current_line.strip().split(';')[1])
         j = i - 1
-        
-        
+
         while j >= 0 and float(lignes[j].strip().split(';')[1]) > current_quantity:
             lignes[j + 1] = lignes[j]
             j -= 1
-        
-        
+
         lignes[j + 1] = current_line
 
-    
     with open('./text/liste.txt', 'w') as liste:
         for ligne in lignes:
             liste.write(ligne.strip() + '\n')
-    
+
     print("Le tri par quantité a été effectué.")
 
 def quicksort_prix(lignes):
     if len(lignes) <= 1:
-        return lignes  
+        return lignes
     pivot = float(lignes[-1].strip().split(';')[2])
-    
+
     moins_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) <= pivot]
     plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
 
@@ -218,14 +206,12 @@ def tri_par_prix():
     with open('./text/liste.txt', 'r') as liste:
         lignes = liste.readlines()
 
-    
     lignes_triees = quicksort_prix(lignes)
     with open('./text/liste.txt', 'w') as fichier:
         for ligne in lignes_triees:
             fichier.write(ligne.strip() + '\n')
-    
+
     print("Le tri par prix avec QuickSort a été effectué.")
 
 ### script ###
-
 menu_connexion()
