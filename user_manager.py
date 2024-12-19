@@ -38,6 +38,9 @@ class UserManager:
             confirmation_message = f"Bienvenue {username}! Votre compte a été créé avec succès."
             send_email(email, "Confirmation d'inscription", confirmation_message)
 
+            # Vérification et alerte des utilisateurs
+            self.verify_and_alert_users()
+
         except Exception as e:
             print(f"Erreur lors de l'ajout de l'utilisateur : {e}")
 
@@ -52,6 +55,7 @@ class UserManager:
             print(f"Erreur de conversion hexadécimale : {e}")
             return False
 
+
     def login(self, username, password):
         try:
             with open(self.user_file, mode='r', newline='') as file:
@@ -60,6 +64,13 @@ class UserManager:
                     if len(row) < 3:
                         continue
                     if row[0] == username and self.verify_password(password, row[2]):
+                        # Vérification de la force du mot de passe
+                        suggestions = check_password_strength(password)
+                        if suggestions:
+                            print("Le mot de passe ne respecte pas les critères de sécurité :")
+                            for suggestion in suggestions:
+                                print(suggestion)
+                            self.verify_and_alert_users()
                         return True
             return False
         except FileNotFoundError:
