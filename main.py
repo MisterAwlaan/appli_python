@@ -1,206 +1,67 @@
-def afficher_menu():
-    print("  Menu ")
-    print("1-Afficher la liste")
-    print("2-Ajout d'un produit")
-    print("3-suppression d'un produit")
-    print("4-rechercher un produit")
-    print("5-Trié le produit par ordre alphabétique")    
-    print("6-Trié par la quantité")
-    print("7-Trié par le prix ")
-    print("8-Recherche par dicho")
-    print("9-Quitter")
+from user_manager import UserManager
+from product_manager import ProductManager
+from utils import get_user_input, get_user_choice
 
-def afficher_liste():
-    with open('./text/liste.txt','r',encoding='utf-8') as liste :
-        contenu = liste.read()
-        return contenu
-    
-def ajout_produit():
-    nom = input("entrer le nom du produit : ")
-    quantite = input("entrer la quantité du produit : ")
-    prix = input("entrer le prix du produit : ")
-    with open('./text/liste.txt','a',encoding='utf-8') as liste :
-        liste.write(f"{nom};{quantite};{prix}\n")
-    print(f"Produit'{nom}'ajouté avec succès.")
+def login_menu():
+    user_manager = UserManager('./data/utilisateur.csv')
+    product_manager = ProductManager('./data/produits.txt')
 
-def suppression_produit():
-    afficher_liste()
-    produit_a_supprimer = input("Quel produit à supprimer : ")
-    with open('./text/liste.txt','r',encoding='utf-8') as liste : 
-        produits = liste.readlines()
-    produits = [p for p in produits if not p.startswith(produit_a_supprimer+";")]
-    with open('./text/liste.txt','w',encoding='utf-8') as liste:
-        liste.writelines(produits)
-    print(f"Produit'{produit_a_supprimer}'supprimé avec succès") 
+    while True:
+        print("\nMenu de connexion :")
+        print("1. Se connecter")
+        print("2. Créer un compte")
+        print("3. Quitter")
+        choice = get_user_choice("Choisissez une option : ", ['1', '2', '3'])
 
-    
-    
-
-def tri_par_ordre_alphabetique():
-    with open('./text/liste.txt', 'r', encoding='utf-8') as liste:
-        lignes = [ligne.strip() for ligne in liste.readlines()]  
-
-    
-    for i in range(1, len(lignes)):
-        current_line = lignes[i]
-        j = i - 1
-       
-        while j >= 0 and lignes[j] > current_line:
-            lignes[j + 1] = lignes[j]  
-            j -= 1
-        lignes[j + 1] = current_line 
-
-    
-    with open('./text/liste.txt', 'w', encoding='utf-8') as fichier:
-        for ligne in lignes:
-            fichier.write(ligne + '\n')
-
-    print("Le tri par ordre alphabétique a été effectué.")
-
-
-def tri_par_quantite():
-    
-    with open('./text/liste.txt', 'r') as liste:
-        lignes = liste.readlines()
-    
-   
-    for i in range(1, len(lignes)):
-        
-        current_line = lignes[i]
-        current_quantity = float(current_line.strip().split(';')[1])
-        j = i - 1
-        
-        
-        while j >= 0 and float(lignes[j].strip().split(';')[1]) > current_quantity:
-            lignes[j + 1] = lignes[j]
-            j -= 1
-        
-        
-        lignes[j + 1] = current_line
-
-    
-    with open('./text/liste.txt', 'w') as liste:
-        for ligne in lignes:
-            liste.write(ligne.strip() + '\n')
-    
-    print("Le tri par quantité a été effectué.")
-
-
-
-def quicksort_prix(lignes):
-    if len(lignes) <= 1:
-        return lignes  
-    pivot = float(lignes[-1].strip().split(';')[2])
-    
-    moins_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) <= pivot]
-    plus_que_pivot = [ligne for ligne in lignes[:-1] if float(ligne.strip().split(';')[2]) > pivot]
-
-    return quicksort_prix(moins_que_pivot) + [lignes[-1]] + quicksort_prix(plus_que_pivot)
-
-
-def tri_par_prix():
-    with open('./text/liste.txt', 'r') as liste:
-        lignes = liste.readlines()
-
-    
-    lignes_triees = quicksort_prix(lignes)
-    with open('./text/liste.txt', 'w') as fichier:
-        for ligne in lignes_triees:
-            fichier.write(ligne.strip() + '\n')
-    
-    print("Le tri par prix avec QuickSort a été effectué.")
-
-
-def recherche_dichotomie_par_nom(nom_cherche):
-    with open('./text/liste.txt', 'r') as f:
-        valeurs = []
-        for ligne in f.readlines():
+        if choice == "1":
+            username = get_user_input("Nom d'utilisateur : ")
+            password = get_user_input("Mot de passe : ")
+            if user_manager.login(username, password):
+                print(f"Connexion réussie. Bienvenue, {username}!")
+                user_menu(username, product_manager)
+            else:
+                print("Échec de la connexion. Veuillez vérifier vos identifiants.")
+        elif choice == "2":
+            username = get_user_input("Nom d'utilisateur : ")
+            email = get_user_input("Adresse mail : ")
+            password = get_user_input("Mot de passe : ")
             try:
-                nom_produit = ligne.strip().split(';')[0]  
-                valeurs.append(nom_produit)
-            except IndexError:
-                
-                continue
-    valeurs_triees = sorted(valeurs)
-    gauche, droite = 0, len(valeurs_triees) - 1
-    while gauche <= droite:
-        milieu = (gauche + droite) // 2
-        if valeurs_triees[milieu] == nom_cherche:
-            print(f"Produit trouvé : {valeurs_triees[milieu]}")
-            return valeurs_triees[milieu]
-        elif valeurs_triees[milieu] < nom_cherche:
-            gauche = milieu + 1
+                user_manager.add_user(username, email, password)
+                user_manager.verify_and_alert_users()
+            except Exception as e:
+                print(f"Erreur lors de l'inscription : {e}")
+        elif choice == "3":
+            print("Au revoir")
+            break
         else:
-            droite = milieu - 1
+            print("Option invalide, veuillez réessayer.")
 
-    
-    print("Produit non trouvé.")
-    return None
-    
-    
-def recherche_produit():
-    nom_recherche = input("Entrer le nom du produit : ")
-    with open('./text/liste.txt','r',encoding='utf-8') as liste :
-        produits = liste.readlines()
-    produit_trouve = False
-    for produit in produits : 
-        nom,quantite,prix = produit.strip().split(';')
-        if nom_recherche.lower() in nom.lower():
-            print(f"Produit trouvé:Nom:{nom},Quantité:{quantite},Prix:{prix}€")
-            produit_trouve = True
-        if not produit_trouve:
-            print(f"Aucun produit correspond à '{nom_recherche}'trouvé.")
-    
-    
-    
-    
-    
-####Script###
+def user_menu(username, product_manager):
+    while True:
+        print("\nMenu :")
+        print("1. Ajouter un produit")
+        print("2. Afficher votre liste")
+        print("3. Trier par quantité")
+        print("4. Trier par prix")
+        print("5. Se déconnecter")
+        choice = get_user_choice("Choisissez une option : ", ['1', '2', '3', '4', '5'])
 
-afficher_menu()
-choix = int(input("Bienvenue dans le menu veuillez choisir votre sélection parmi les 3 propositions : "))
+        if choice == "1":
+            product = get_user_input("Entrez le nom du produit à ajouter : ")
+            quantity = get_user_input("Entrez la quantité : ")
+            price = get_user_input("Entrez le prix à l'unité du produit : ")
+            product_manager.add_product(username, product, quantity, price)
+            print(f"Produit '{product}' ajouté avec succès à la liste.")
+        elif choice == "2":
+            product_manager.display_list(username)
+        elif choice == "3":
+            product_manager.sort_by_quantity()
+        elif choice == "4":
+            product_manager.sort_by_price()
+        elif choice == "5":
+            login_menu()
+        else:
+            print("Option invalide, veuillez réessayer.")
 
-while choix != 9 : 
-    
-    if choix == 1 : 
-        afficher_menu()
-        print('')
-        print(afficher_liste())
-        print('')
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 2 :
-        afficher_menu()
-        print('')
-        ajout_produit()
-        print('')
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 3: 
-        afficher_menu()
-        print('')
-        suppression_produit()
-        print('')
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 4 : 
-        recherche_produit()
-        print("")
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 5 : 
-        tri_par_ordre_alphabetique()
-        print("")
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 6 : 
-        tri_par_quantite()
-        print("")
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 7 : 
-        tri_par_prix()
-        print("")
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-    if choix == 8 : 
-        nom_cherche = input("entrer le produit à chercher : ")
-        recherche_dichotomie_par_nom(nom_cherche)
-        print("")
-        choix = int(input("Veuillez choisir votre sélection parmi les 3 propositions : "))
-        
-    if choix == 9 :
-        print("aurevoir")
+if __name__ == "__main__":
+    login_menu()
