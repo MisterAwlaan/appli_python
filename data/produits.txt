@@ -1,6 +1,5 @@
-
-test, Dimos,45,1
-test, chaise,45,0.2
-test, ps5,54,500
-admin, clé,10,12
-admin, 3,,
+Jean, banane,10,0.5
+Jean, souris,80,10
+Jean, chaise,12,100
+Jean, wc,10,500
+Jean, ordinateur,10,1500

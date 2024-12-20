@@ -77,6 +77,61 @@ class UserManager:
             print("Le fichier utilisateur n'existe pas.")
             return False
 
+    def modif_password(self, username, old_password, new_password):
+        # Vérification de l'ancien mot de passe
+        if not self.login(username, old_password):
+            print("L'ancien mot de passe est incorrect.")
+            return
+
+        # Vérification de la force du nouveau mot de passe
+        suggestions = check_password_strength(new_password)
+        if suggestions:
+            print("Le nouveau mot de passe ne respecte pas les critères de sécurité :")
+            for suggestion in suggestions:
+                print(suggestion)
+            return
+
+        # Vérification si le nouveau mot de passe est compromis
+        compromised_count = is_password_compromised(new_password)
+        if compromised_count > 0:
+            print(f"Le nouveau mot de passe a été compromis {compromised_count} fois. Veuillez choisir un autre mot de passe.")
+            return
+
+        # Hachage du nouveau mot de passe
+        new_hashed_password = hash_password(new_password)
+
+        # Mise à jour du mot de passe dans le fichier CSV
+        try:
+            with open(self.user_file, mode='r', newline='') as file:
+                reader = csv.reader(file)
+                rows = list(reader)
+
+            with open(self.user_file, mode='w', newline='') as file:
+                writer = csv.writer(file)
+                for row in rows:
+                    if len(row) < 3:
+                        continue
+                    if row[0] == username:
+                        row[2] = new_hashed_password
+                    writer.writerow(row)
+
+            print(f"Mot de passe de l'utilisateur {username} modifié avec succès.")
+
+            # Envoi d'un e-mail de confirmation
+            confirmation_message = f"Votre mot de passe a été modifié avec succès, {username}."
+            send_email(row[1], "Confirmation de modification de mot de passe", confirmation_message)
+
+            # Vérification et alerte des utilisateurs
+            self.verify_and_alert_users()
+
+        except Exception as e:
+            print(f"Erreur lors de la modification du mot de passe : {e}")
+    
+    
+    
+    
+    
+    
     def verify_and_alert_users(self):
         try:
             with open(self.user_file, mode='r', newline='') as file:

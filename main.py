@@ -37,13 +37,14 @@ def login_menu():
             print("Option invalide, veuillez réessayer.")
 
 def user_menu(username, product_manager):
+    user_manager = UserManager('./data/utilisateur.csv')
     while True:
         print("\nMenu :")
         print("1. Ajouter un produit")
         print("2. Afficher votre liste")
         print("3. Trier par quantité")
         print("4. Trier par prix")
-        print("5. Se déconnecter")
+        print("5. MOdifier mots de passe ")
         choice = get_user_choice("Choisissez une option : ", ['1', '2', '3', '4', '5'])
 
         if choice == "1":
@@ -59,7 +60,11 @@ def user_menu(username, product_manager):
         elif choice == "4":
             product_manager.sort_by_price()
         elif choice == "5":
-            login_menu()
+            old_password = get_user_input("Entrez l'ancien mot de passe : ")
+            new_password = get_user_input("Entrez le nouveau mot de passe : ")
+            user_manager.modif_password(username, old_password, new_password)
+
+            
         else:
             print("Option invalide, veuillez réessayer.")
 
